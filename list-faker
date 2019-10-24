@@ -11,14 +11,33 @@ use Data::Faker::Sympa::ListTopic;
 use Data::Faker::Sympa::ListType;
 use Data::Faker::Sympa::OwnerEmail;
 
+use Getopt::Long;
 use XML::Hash::XS;
+
+# Command line options
+my $whandler = $SIG{__WARN__};
+$SIG{__WARN__} = sub {print STDERR "$0: @_";};
+
+my %overrides;
+
+unless (GetOptions (
+    \%overrides,
+    'description|t=s',
+    'name|n=s',
+    'topic|n=s',
+    'type|t=s',
+)) {
+	exit 1;
+}
+
+$SIG{__WARN__} = $whandler;
 
 my $fake = Data::Faker->new;
 
-random_xml($fake);
+random_xml($fake, \%overrides);
 
 sub random_xml {
-    my $fake = shift;
+    my ($fake, $overrides) = @_;
 
     # build the struct
     my $new_list = {
@@ -33,6 +52,10 @@ sub random_xml {
      #   owner => { content => 'foo', multiple => 1}, #, {email => $fake->sympa_owner_email }},
     };
 
+    while (my ($name, $value) = each %$overrides) {
+        $new_list->{$name} = $value;
+    }
+
     print hash2xml(
         $new_list,
         root => 'list',
@@ -41,4 +64,3 @@ sub random_xml {
         content => 'content',
     ), "\n";
 }
-
