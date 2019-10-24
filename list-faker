@@ -1,0 +1,44 @@
+#! /usr/bin/env perl
+
+use strict;
+use warnings;
+
+use lib './lib';
+
+use Data::Faker;
+use Data::Faker::Sympa::ListDescription;
+use Data::Faker::Sympa::ListTopic;
+use Data::Faker::Sympa::ListType;
+use Data::Faker::Sympa::OwnerEmail;
+
+use XML::Hash::XS;
+
+my $fake = Data::Faker->new;
+
+random_xml($fake);
+
+sub random_xml {
+    my $fake = shift;
+
+    # build the struct
+    my $new_list = {
+        listname => [lc($fake->first_name)],
+        subject => [$fake->name],
+        description => [$fake->sympa_list_description],
+        type => [$fake->sympa_list_type],
+        topics => [$fake->sympa_list_topic],
+        status => ['open'],
+        owner => {multiple => 1, email => [$fake->sympa_owner_email]},
+     #   multiple => 1,
+     #   owner => { content => 'foo', multiple => 1}, #, {email => $fake->sympa_owner_email }},
+    };
+
+    print hash2xml(
+        $new_list,
+        root => 'list',
+        use_attr => 1,
+        indent => 2,
+        content => 'content',
+    ), "\n";
+}
+
