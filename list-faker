@@ -53,7 +53,7 @@ sub random_xml {
     };
 
     while (my ($name, $value) = each %$overrides) {
-        $new_list->{$name} = $value;
+        $new_list->{$name} = [$value];
     }
 
     print hash2xml(
