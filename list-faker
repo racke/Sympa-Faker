@@ -22,9 +22,9 @@ my %overrides;
 
 unless (GetOptions (
     \%overrides,
-    'description|t=s',
+    'description|d=s',
     'name|n=s',
-    'topic|n=s',
+    'topic|c=s',
     'type|t=s',
 )) {
 	exit 1;
