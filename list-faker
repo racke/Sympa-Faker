@@ -25,6 +25,7 @@ unless (GetOptions (
     \%overrides,
     'description|d=s',
     'name|n=s',
+    'status|s=s',
     'topic|c=s',
     'type|t=s',
 )) {
@@ -47,7 +48,6 @@ sub random_xml {
         description => [$fake->sympa_list_description],
         type => [$fake->sympa_list_type],
         topics => [$fake->sympa_list_topic],
-        status => ['open'],
         owner => {multiple => 1, email => [$fake->sympa_owner_email]},
      #   multiple => 1,
      #   owner => { content => 'foo', multiple => 1}, #, {email => $fake->sympa_owner_email }},
